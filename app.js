@@ -41,13 +41,11 @@ app.use((req, res, next) => {
   res.sendStatus(406);
 });
 
-const articles = require('./routes/articles');
-// const favorites = require('./routes/favorites');
+const articles = require('./routes/posts');
 const token = require('./routes/token');
 const users = require('./routes/users');
 
-app.use(articles);
-// app.use(favorites);
+app.use(posts);
 app.use(token);
 app.use(users);
 
