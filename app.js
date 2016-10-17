@@ -43,11 +43,11 @@ app.use((req, res, next) => {
 
 const articles = require('./routes/posts');
 const token = require('./routes/token');
-const users = require('./routes/users');
+const users = require('./routes/authors');
 
 app.use(posts);
 app.use(token);
-app.use(users);
+app.use(authors);
 
 app.use((_req, res) => {
   res.sendStatus(404);
