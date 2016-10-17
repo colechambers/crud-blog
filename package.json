@@ -14,10 +14,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/colechambers/crud-blog.git"
+    "url": "git+https://github.com/colechambers/crud-blog.git"
   },
   "author": "Cole Chambers",
-
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/colechambers/crud-blog/Issues"
