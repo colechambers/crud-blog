@@ -1,0 +1,49 @@
+{
+  "name": "express-blog",
+  "version": "1.0.0",
+  "description": "build a CRUD app using Express to power a dynamic blog",
+  "main": "app.js",
+  "scripts": {
+    "knex": "knex",
+    "heroku-postbuild": "knex migrate:latest",
+    "lint": "eslint  --ignore-pattern public/js/vendor",
+    "nf": "nf start",
+    "nodemon": "nodemon server.js",
+    "start": "nodemon server.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colechambers/crud-blog.git"
+  },
+  "author": "Cole Chambers",
+
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/colechambers/crud-blog/Issues"
+  },
+  "homepage": "https://github.com/colechambers/crud-blog#readme",
+  "dependencies": {
+    "bcrypt-as-promised": "^1.1.0",
+    "body-parser": "^1.15.2",
+    "boom": "^3.2.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "humps": "^1.1.0",
+    "jsonwebtoken": "^7.1.9",
+    "knex": "^0.11.7",
+    "morgan": "^1.7.0",
+    "pg": "^6.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "dotenv": "^2.0.0",
+    "foreman": "^1.4.1",
+    "mocha": "^2.5.3",
+    "nodemon": "^1.10.0",
+    "supertest": "^1.2.0"
+  },
+  "engines": {
+    "node": "6.7.0"
+  }
+}
