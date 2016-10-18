@@ -8,8 +8,8 @@
     "heroku-postbuild": "knex migrate:latest",
     "lint": "eslint  --ignore-pattern public/js/vendor",
     "nf": "nf start",
-    "nodemon": "nodemon server.js",
-    "start": "nodemon server.js",
+    "nodemon": "nodemon app.js",
+    "start": "nodemon app.js",
     "test": "mocha"
   },
   "repository": {

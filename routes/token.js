@@ -5,12 +5,24 @@ const boom = require('boom');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const knex = require('../knex');
-const { camelizeKeys, decamelizeKeys } = require('humps');
+const { camelizeKeys } = require('humps');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-router.post('/authors', (req, res, next) => {
+router.get('/token', (req, res) => {
+  const accessToken = req.cookies.accessToken;
+
+  jwt.verify(accessToken, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.send(false);
+    }
+
+    res.send(true);
+  });
+});
+
+router.post('/token', (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !email.trim()) {
@@ -18,33 +30,24 @@ router.post('/authors', (req, res, next) => {
   }
 
   if (!password || password.length < 8) {
-    return next(boom.create(
-      400,
-      'Password must be at least 8 characters long'
-    ));
+    return next(boom.create(400, 'Password must not be blank'));
   }
 
+  let author;
+
   knex('authors')
-    .select(knex.raw('1=1'))
     .where('email', email)
     .first()
-    .then((exists) => {
-      if (exists) {
-        throw boom.create(400, 'Email already exists');
+    .then((row) => {
+      if (!row) {
+        throw boom.create(400, 'Bad email or password');
       }
 
-      return bcrypt.hash(password, 12);
-    })
-    .then((hashedPassword) => {
-      const { firstName, lastName } = req.body;
-      const insertauthor = { firstName, lastName, email, hashedPassword };
+      author = camelizeKeys(row);
 
-      return knex('authors')
-        .insert(decamelizeKeys(insertauthor), '*');
+      return bcrypt.compare(password, author.hashedPassword);
     })
-    .then((rows) => {
-      const author = camelizeKeys(rows[0]);
-
+    .then(() => {
       delete author.hashedPassword;
 
       const expiry = new Date(Date.now() + 1000 * 60 * 60 * 3); // 3 hours
@@ -60,9 +63,17 @@ router.post('/authors', (req, res, next) => {
 
       res.send(author);
     })
+    .catch(bcrypt.MISMATCH_ERROR, () => {
+      throw boom.create(400, 'Bad email or password');
+    })
     .catch((err) => {
       next(err);
     });
+});
+
+router.delete('/token', (req, res) => {
+  res.clearCookie('accessToken');
+  res.send(true);
 });
 
 module.exports = router;
